@@ -1,0 +1,11 @@
+__pycache__/
+.DS_Store
+main
+.idea
+mythic_go_services.bin
+build
+.venv
+compile_commands.json
+.cache
+Session.vim
+rabbitmq_config.json
