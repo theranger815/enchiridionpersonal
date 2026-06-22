@@ -1,5 +1,7 @@
 #ifndef PORT_SCAN_H
 #define PORT_SCAN_H
+#define PORT_SCAN_MAX_PORTS 65535
+
 #include "commands.h"
 
 // host:  IPv4 address or hostname to scan
