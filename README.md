@@ -24,7 +24,7 @@
 
 ## Helpful links
 
-[Example Container/Agent](https://github.com/MythicMeta/ExampleContainers)
-[Mythic Documentation](https://docs.mythic-c2.net/)
-[Making your own Mythic Agent](https://red-team-sncf.github.io/how-to-create-your-own-mythic-agent-in-c.html)
+- [Example Container/Agent](https://github.com/MythicMeta/ExampleContainers)
+- [Mythic Documentation](https://docs.mythic-c2.net/)
+- [Making your own Mythic Agent](https://red-team-sncf.github.io/how-to-create-your-own-mythic-agent-in-c.html)
 # enchiridion-stripped
