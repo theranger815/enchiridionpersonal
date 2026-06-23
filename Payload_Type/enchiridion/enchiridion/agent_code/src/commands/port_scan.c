@@ -10,6 +10,9 @@
 //#include "commands.h"
 #include "enchiridion.h"
 //#include "utils.h"
+#include <string.h>
+#include <stdlib.h>
+
 
 void portScan(char *host, char *port, char *mode, TaskResponse *resp) {
 
