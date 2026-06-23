@@ -9,6 +9,7 @@
 #include "download.h"
 #include "socks5.h"
 #include "task_kill.h"
+#include "port_scan.h"
 #include "upload.h"
 #include "utils.h"
 #include <pthread.h>
