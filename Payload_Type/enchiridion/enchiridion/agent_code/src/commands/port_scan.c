@@ -1,6 +1,9 @@
 
 #include "port_scan.h"
 
+
+int *portParser(char *ports);
+
 void portScan(char *host, char *port, char *mode, TaskResponse *resp) {
 
     int sockfd;

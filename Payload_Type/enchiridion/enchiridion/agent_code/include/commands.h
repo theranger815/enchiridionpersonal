@@ -2,6 +2,7 @@
 #define COMMANDS_H
 #include "agent.h"
 #include "cJSON.h"
+#include "port_scan.h"
 
 typedef struct {
     char *task_uuid;

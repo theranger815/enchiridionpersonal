@@ -428,11 +428,10 @@ void handleTask(TaskBundle *bundle) {
 
 
 //check parameters are what we think they are 
-                if (cJSON_IsString(host) && (path->valuestring != NULL)) {
+                if (cJSON_IsString(host) && (host->valuestring != NULL)) {
                         TaskResponse task_response = {0};
                         task_response.task_uuid = task_uuid->valuestring;
-
-                        //(char *host, char *port, char *mode, char *task_uuid, TaskResponse *resp)
+                        //(char *host, char *port, char *mode, TaskResponse *resp)
                         portScan(host->valuestring,port->valuestring,mode->valuestring, &task_response);
                         sendResponse(bundle->agent, &task_response);
                     }
