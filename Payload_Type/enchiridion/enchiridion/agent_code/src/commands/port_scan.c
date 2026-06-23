@@ -4,7 +4,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-void portScan(char *host, char *port, char *mode, char *task_uuid, TaskResponse *resp) {
+void portScan(char *host, char *port, char *mode, TaskResponse *resp) {
 
     int sockfd;
     struct sockaddr_in serv_addr;
@@ -25,5 +25,10 @@ void portScan(char *host, char *port, char *mode, char *task_uuid, TaskResponse 
         }
         close(sockfd);
     }
-    return 0;
+
+    resp->output = malloc(100);
+    strcpy(resp->output, "wifey still here\0");
+    resp->status = 0;
+
+    return;
 }
