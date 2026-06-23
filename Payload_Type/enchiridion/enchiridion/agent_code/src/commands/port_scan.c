@@ -1,8 +1,5 @@
-#include <stdio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
+
+#include "port_scan.h"
 
 void portScan(char *host, char *port, char *mode, TaskResponse *resp) {
 
