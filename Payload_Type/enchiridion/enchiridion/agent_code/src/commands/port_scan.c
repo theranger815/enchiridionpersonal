@@ -61,12 +61,7 @@ void portScan(char *host, char *port, char *mode, TaskResponse *resp) {
         scanned_port = scan(atoi(token), sockfd, serv_addr);
 
         if (scanned_port != -1) {
-            // strcpy(resp->output, scanned_port);
-            resp->output[buf_len] = scanned_port;
-            buf_len += sizeof(scanned_port);
-
-            resp->output[buf_len] = '\n';
-            buf_len++;
+            buf_len += snprintf(resp->output + buf_len, BUF_LEN - buf_len, "%d\n", scanned_port);
         }
 
         token = strtok(NULL, ",");
