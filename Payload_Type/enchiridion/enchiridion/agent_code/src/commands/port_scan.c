@@ -4,7 +4,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-int main() {
+void portScan(char *host, char *port, char *mode, char *task_uuid, TaskResponse *resp) {
+
     int sockfd;
     struct sockaddr_in serv_addr;
 

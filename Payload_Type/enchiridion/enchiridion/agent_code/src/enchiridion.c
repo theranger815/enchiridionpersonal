@@ -418,6 +418,17 @@ void handleTask(TaskBundle *bundle) {
                         sendResponse(bundle->agent, &task_response);
                     }
                 }
+            // TODO: Implement port scan
+            }  else if (strcmp(command->valuestring, "pscan") == 0) {
+                if (param_json != NULL) {
+                    cJSON *path = cJSON_GetObjectItem(param_json, "path");
+                    if (cJSON_IsString(path) && (path->valuestring != NULL)) {
+                        TaskResponse task_response = {0};
+                        task_response.task_uuid = task_uuid->valuestring;
+                        fileListing(path->valuestring, &task_response);
+                        sendResponse(bundle->agent, &task_response);
+                    }
+                }
             } else if (strcmp(command->valuestring, "socks") == 0) {
                 TaskResponse task_response = {0};
                 task_response.task_uuid = task_uuid->valuestring;
