@@ -10,7 +10,7 @@ from mythic_container.PayloadBuilder import *
 
 
 class EnchiridionAgent(PayloadType):
-    name = "enchiridion"
+    name = "enchiridion-testPortScan"
     file_extension = ""
     author = "@blackgazzelle"
     supported_os = [SupportedOS.Linux]
