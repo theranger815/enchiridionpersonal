@@ -1,8 +1,15 @@
 
 #include "port_scan.h"
-
-
-int *portParser(char *ports);
+#include "commands.h"
+#include "cJSON.h"
+#include "utils.h"
+//#include "download.h"
+#include "agent.h"
+#include "b64.h"
+//#include "cJSON.h"
+//#include "commands.h"
+#include "enchiridion.h"
+//#include "utils.h"
 
 void portScan(char *host, char *port, char *mode, TaskResponse *resp) {
 
