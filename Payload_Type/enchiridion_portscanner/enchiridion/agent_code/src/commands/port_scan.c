@@ -14,6 +14,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#define BUF_LEN 1024
+
 int scan(int port, int sockfd, struct sockaddr_in serv_addr) {
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
@@ -23,11 +25,8 @@ int scan(int port, int sockfd, struct sockaddr_in serv_addr) {
 
     // If connection fails
     if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) != 0) {
-        port = 0;
+        port = -1;
     }
-
-    if (port != 0) 
-        printf("Port %d is open\n", port);
 
     close(sockfd);
     return port;
@@ -44,6 +43,10 @@ void portScan(char *host, char *port, char *mode, TaskResponse *resp) {
     // Split on commas
     char* token = strtok(port, ",");
 
+    int scanned_port = 0;
+    size_t buf_len = 0;
+    resp->output = malloc(BUF_LEN);
+
     // Iterate through each port
     while (token != NULL) {
 
@@ -55,13 +58,21 @@ void portScan(char *host, char *port, char *mode, TaskResponse *resp) {
         }
 
         printf("[*] Scanning %s...\n", token);
-        scan(atoi(token), sockfd, serv_addr);
+        scanned_port = scan(atoi(token), sockfd, serv_addr);
+
+        if (scanned_port != -1) {
+            // strcpy(resp->output, scanned_port);
+            resp->output[buf_len] = scanned_port;
+            buf_len += sizeof(scanned_port);
+
+            resp->output[buf_len] = '\n';
+            buf_len++;
+        }
 
         token = strtok(NULL, ",");
     }
 
-    resp->output = malloc(100);
-    strcpy(resp->output, "wifey still here\0");
+    resp->output[buf_len] = '\0';
     resp->status = 0;
 
     return;
