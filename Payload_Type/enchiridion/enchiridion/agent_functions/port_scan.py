@@ -23,14 +23,13 @@ class PscanArguments(TaskArguments):
                 type=ParameterType.String,
                 description="Scan type (syn/banner)",
                 parameter_group_info=[ParameterGroupInfo(required=True)],
-            )
+            ),
         ]
 
-    # NOTE: This shi could be wrong
+    # NOTE: This shi was wrong lmao
     async def parse_arguments(self):
-        self.add_arg("host", self.command_line)
-        self.add_arg("port", self.command_line)
-        self.add_arg("mode", self.command_line)
+        self.load_args_from_json_string(self.command_line)
+
 
 class PscanCommand(CommandBase):
     cmd = "pscan"
