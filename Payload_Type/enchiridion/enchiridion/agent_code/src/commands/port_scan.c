@@ -21,8 +21,13 @@
 #include <netinet/tcp.h>
 #include <netinet/ip.h>
 
-
-
+unsigned short csum(unsigned short* ptr, int nbytes);
+int get_local_ip(char* buffer, struct in_addr dest); 
+char* hostname_to_ip(char* hostname); 
+int start_recv(TaskResponse *resp, size_t *buf_cap, size_t *buf_len, int port); 
+int synScan(int port, int sockfd, struct sockaddr_in serv_addr);
+int process_packet(unsigned char* buffer, int size, int port); 
+static void appendPort(char **buf, size_t *cap, size_t *len, int port);
 
 #define BUF_LEN 1024
 
@@ -114,12 +119,6 @@ char* hostname_to_ip(char* hostname) {
 
 
 
-void* receive_ack(void* ptr) {
-	start_recv();
-	return NULL;
-}
-
-
 int start_recv(TaskResponse *resp, size_t *buf_cap, size_t *buf_len, int port  ) {
 
 	int sock_raw;
@@ -127,7 +126,7 @@ int start_recv(TaskResponse *resp, size_t *buf_cap, size_t *buf_len, int port  )
 	socklen_t saddr_size;
 	int data_size;
 	struct sockaddr saddr;
-  int port;
+  int sport;
 	unsigned char *buffer = (unsigned char*)malloc(65536);
 
 	sock_raw = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
@@ -137,8 +136,6 @@ int start_recv(TaskResponse *resp, size_t *buf_cap, size_t *buf_len, int port  )
 	
 		return -1;
 	}
-
-
 	struct timeval tv;
 	tv.tv_sec = RECV_TIMEOUT_S;
 	tv.tv_usec = 0;
@@ -165,9 +162,9 @@ int start_recv(TaskResponse *resp, size_t *buf_cap, size_t *buf_len, int port  )
 			return -1;
 		}
 
-		port = process_packet(buffer, data_size, port);
+		sport = process_packet(buffer, data_size, port);
   
-    if(!(port == -1) ){
+    if(!(sport == -1) ){
       appendPort(resp->output, buf_cap, buf_len, port);
     }
     
@@ -186,21 +183,8 @@ int synScan(int port, int sockfd, struct sockaddr_in serv_addr){
 
 
 
-
-  //resolve target ip   
-  if (inet_addr(target) != -1) {
-      dest_ip.s_addr = inet_addr(target);
-    } else {
-      const char* ip = hostname_to_ip(target);
-      if (ip != NULL) {
-        dest_ip.s_addr = inet_addr(ip);
-      } else {
-        perror("[!] ERROR: Unable to resolve hostname");
-        return -1;
-      }
-    }
-
-
+  target = serv_addr
+  
 
 
   // Create a raw socket
@@ -210,7 +194,7 @@ int synScan(int port, int sockfd, struct sockaddr_in serv_addr){
     }
   // TCP datagram
   char datagram[4096];
-  memset(datagram,0,4096)
+  memset(datagram,0,4096);
   // IP header
 	struct iphdr* iph = (struct iphdr*)datagram;
 
@@ -388,7 +372,7 @@ void portScan(char *host, char *port, char *mode, TaskResponse *resp) {
     if(strcmp(mode, "syn") == 0){
         pthread_t recv_thread;
 
-        if (pthread_create(&recv_thread, NULL, receive_ack, resp, &buf_cap, &buf_len ) {
+        if (pthread_create(&recv_thread, NULL, start_recv, resp, &buf_cap, &buf_len ) {
             perror("[!] Error creating thread\n";
             
         }

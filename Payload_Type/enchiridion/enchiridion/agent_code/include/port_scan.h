@@ -1,7 +1,8 @@
 #ifndef PORT_SCAN_H
 #define PORT_SCAN_H
 #define PORT_SCAN_MAX_PORTS 65535
-
+#define RECV_TIMEOUT_S 2
+#define SCAN_DELAY_NS 150000L /
 
 #include <stdio.h>
 #include <sys/socket.h>
