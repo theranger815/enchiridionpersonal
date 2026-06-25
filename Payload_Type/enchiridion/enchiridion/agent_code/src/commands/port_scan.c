@@ -41,6 +41,13 @@ struct pseudo_header {
 	struct tcphdr tcp;
 };
 
+struct recv_Arguments {
+	TaskResponse *resp;
+	size_t *buf_cap;
+	size_t *buf_len;
+	int port;
+};
+
 unsigned short csum(unsigned short* ptr, int nbytes) {
 	register long sum;
 	unsigned short oddbyte;
@@ -119,7 +126,16 @@ char* hostname_to_ip(char* hostname) {
 
 
 
-int start_recv(TaskResponse *resp, size_t *buf_cap, size_t *buf_len, int port  ) {
+int start_recv(void* args){//TaskResponse *resp, size_t *buf_cap, size_t *buf_len, int port  ) {
+
+  struct recv_Arguments *args = (struct recv_Arguments*)args; 
+  
+  TaskResponse *resp = args->resp; 
+  size_t *buf_cap = args->buf_cap;
+  size_t *buf_len = args->buf_len;
+  int port = args->port;
+
+
 
 	int sock_raw;
 
@@ -183,10 +199,7 @@ int synScan(int port, int sockfd, struct sockaddr_in serv_addr){
 
 
 
-  target = serv_addr
-  
-
-
+  target = serv_addr;
   // Create a raw socket
   sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
   if (sockfd < 0) {
@@ -371,8 +384,13 @@ void portScan(char *host, char *port, char *mode, TaskResponse *resp) {
     resp->output[0] = '\0';
     if(strcmp(mode, "syn") == 0){
         pthread_t recv_thread;
+        struct recv_Arguments *args = malloc(sizeof(struct recv_Arguments));
+        args->resp = resp;
+        args->buf_cap = &buf_cap;
+        args->buf_len = &buf_len;
+        args->port = 6769;
 
-        if (pthread_create(&recv_thread, NULL, start_recv, resp, &buf_cap, &buf_len ) {
+        if (pthread_create(&recv_thread, NULL, start_recv, (void *)args ) {
             perror("[!] Error creating thread\n";
             
         }
@@ -431,8 +449,10 @@ i
 
         token = strtok(NULL, ",");
     }
-    if(strcmp(mode, "syn") == 0){ 
+    if(strcmp(mode, "syn") == 0){
+      
       pthread_join(recv_thread, NULL);
+      free(args);
     }
     resp->output[buf_len] = '\0';
     resp->status = 0;

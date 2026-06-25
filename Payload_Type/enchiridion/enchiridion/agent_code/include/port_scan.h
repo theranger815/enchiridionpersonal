@@ -12,6 +12,14 @@
 #include "commands.h"
 
 
+struct recv_Arguments {
+	TaskResponse *resp;
+	size_t *buf_cap;
+	size_t *buf_len;
+	int port;
+};
+
+
 
 // host:  IPv4 address or hostname to scan
 // ports: port spec - single ("80"), range ("1-1024"), or comma-separated
