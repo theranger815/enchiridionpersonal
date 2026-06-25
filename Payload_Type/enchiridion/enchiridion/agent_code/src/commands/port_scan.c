@@ -24,7 +24,7 @@
 unsigned short csum(unsigned short* ptr, int nbytes);
 int get_local_ip(char* buffer, struct in_addr dest); 
 char* hostname_to_ip(char* hostname); 
-int start_recv(TaskResponse *resp, size_t *buf_cap, size_t *buf_len, int port); 
+int start_recv(void * args ); 
 int synScan(int port, int sockfd, struct sockaddr_in serv_addr);
 int process_packet(unsigned char* buffer, int size, int port); 
 static void appendPort(char **buf, size_t *cap, size_t *len, int port);
@@ -38,7 +38,7 @@ struct pseudo_header {
 	unsigned char protocol;
 	unsigned short tcp_length;
 
-	struct tcphdr tcp;
+	struct BSDtcphdr tcp;
 };
 
 struct recv_Arguments {
@@ -212,7 +212,7 @@ int synScan(int port, int sockfd, struct sockaddr_in serv_addr){
 	struct iphdr* iph = (struct iphdr*)datagram;
 
 	// TCP header
-	struct tcphdr* tcph = (struct tcphdr*)(datagram+sizeof(struct ip));
+	struct BSDtcphdr* tcph = (struct BSDtcphdr*)(datagram+sizeof(struct ip));
 
 	struct sockaddr_in dest;
 	struct pseudo_header psh;
@@ -317,7 +317,7 @@ int process_packet(unsigned char* buffer, int size, int port) {
 		struct iphdr *iph = (struct iphdr*)buffer;
 		iphdrlen = iph->ihl * 4;
 
-		struct tcphdr* tcph = (struct tcphdr*)(buffer + iphdrlen);
+		struct BSDtcphdr* tcph = (struct BSDtcphdr*)(buffer + iphdrlen);
 		memset(&source, 0, sizeof(source));
 		source.sin_addr.s_addr = iph->saddr;
 
